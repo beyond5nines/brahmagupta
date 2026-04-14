@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "glue-busters"
+version = "1.0.0"
+description = "A collection of tools for debugging and optimizing AWS Glue and Spark jobs."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.10"
+keywords = ["spark", "glue", "shuffle", "debug", "performance"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: System :: Distributed Computing",
+]
+
+# lz4 is optional — the tool works without it but LZ4 measurement is skipped.
+dependencies = []
+
+[project.optional-dependencies]
+lz4 = ["lz4>=4.0.0"]
+dev  = ["lz4>=4.0.0", "pytest>=8.0", "pytest-cov"]
+
+[project.scripts]
+analyze-shuffle = "analyze_shuffle:main"
+
+[tool.setuptools.py-modules]
+# single-module package — no sub-packages
+_ = []

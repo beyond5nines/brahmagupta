@@ -1,0 +1,9 @@
+# analyze_shuffle.py runtime dependencies
+#
+# All stdlib modules (gzip, zlib, struct, re, json, argparse, collections,
+# pathlib, sys) require no installation.
+#
+# lz4 is optional but strongly recommended.  Without it:
+#   - LZ4 compression ratio will not appear in the comparison table.
+#   - A warning is printed if the file is LZ4Block-compressed.
+lz4>=4.0.0
