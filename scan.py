@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-analyze_shuffle.py — Spark / AWS Glue shuffle file analyzer.
+scan.py — Spark / AWS Glue shuffle file analyzer.
 
 Inspects binary shuffle .data files (and optional companion .index files)
 produced by Spark's sort-based and hash-based shuffle writers.  Works with
@@ -14,7 +14,7 @@ based solely on structural observations.
 Supported compression wrappers: LZ4Block, Snappy, ZSTD, uncompressed.
 
 Usage:
-    python3 analyze_shuffle.py <path/to/shuffle_N_M_0.data> [options]
+    python3 scan.py <path/to/shuffle_N_M_0.data> [options]
 
     Options:
         --max-bytes INT         Maximum bytes to read from the .data file
@@ -117,7 +117,7 @@ class ShuffleReport:
 
 def build_argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="analyze_shuffle",
+        prog="scan",
         description=(
             "Inspect Spark / AWS Glue shuffle .data files. "
             "Detects compression format, maps partitions, measures byte-level "

@@ -14,7 +14,7 @@ This project is named after him because it does what he did: looks past the surf
 
 ## Tools
 
-### analyze_shuffle.py
+### scan.py.py
 
 A command-line tool for inspecting Spark and AWS Glue shuffle `.data` files.
 
@@ -24,7 +24,7 @@ to S3 in Glue) during wide transformations like `groupBy`, `join`, and
 these files are the first place to look — but they are binary and not human
 readable without a tool.
 
-`analyze_shuffle.py` tells you:
+`scan.py` tells you:
 
 - What compression wrapper Spark used (LZ4Block, Snappy, ZSTD, or raw)
 - How many partitions the file contains and how many are empty
@@ -57,7 +57,7 @@ standard library.
 ### Run directly (no install)
 
 ```bash
-python3 analyze_shuffle.py shuffle_N_M_0.data
+python3 scan.py shuffle_N_M_0.data
 ```
 
 ### Install as a package
@@ -66,10 +66,10 @@ python3 analyze_shuffle.py shuffle_N_M_0.data
 pip install .
 ```
 
-This installs the `analyze-shuffle` command so you can run it from anywhere:
+This installs the `scan` command so you can run it from anywhere:
 
 ```bash
-analyze-shuffle shuffle_N_M_0.data
+scan shuffle_N_M_0.data
 ```
 
 ### Install with LZ4 support
@@ -83,7 +83,7 @@ pip install ".[lz4]"
 ## Usage
 
 ```
-analyze-shuffle SHUFFLE_DATA_FILE [options]
+scan SHUFFLE_DATA_FILE [options]
 ```
 
 The companion `.index` file is auto-detected from the same directory by
@@ -106,25 +106,25 @@ substituting `.data` with `.index`. You never need to pass it manually.
 
 ```bash
 # Basic analysis
-python3 analyze_shuffle.py shuffle_98_37726_0.data
+python3 scan.py shuffle_98_37726_0.data
 
 # Cap memory use on a large file
-python3 analyze_shuffle.py shuffle_53_21062_0.data --max-bytes 500000
+python3 scan.py shuffle_53_21062_0.data --max-bytes 500000
 
 # Machine-readable JSON
-python3 analyze_shuffle.py shuffle_98_37726_0.data --json
+python3 scan.py shuffle_98_37726_0.data --json
 
 # Save JSON report to file
-python3 analyze_shuffle.py shuffle_98_37726_0.data --json > report.json
+python3 scan.py shuffle_98_37726_0.data --json > report.json
 
 # Query JSON with jq
-python3 analyze_shuffle.py shuffle_98_37726_0.data --json | jq '.partitions.empty'
+python3 scan.py shuffle_98_37726_0.data --json | jq '.partitions.empty'
 
 # Skip recommendations (useful in CI pipelines)
-python3 analyze_shuffle.py shuffle_98_37726_0.data --no-recommendations
+python3 scan.py shuffle_98_37726_0.data --no-recommendations
 
 # Verbose mode with a read limit
-python3 analyze_shuffle.py shuffle_53_21062_0.data --verbose --max-bytes 100000
+python3 scan.py shuffle_53_21062_0.data --verbose --max-bytes 100000
 ```
 
 ---
