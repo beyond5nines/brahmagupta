@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "glue-busters"
@@ -32,6 +32,5 @@ dev  = ["lz4>=4.0.0", "pytest>=8.0", "pytest-cov"]
 [project.scripts]
 analyze-shuffle = "analyze_shuffle:main"
 
-[tool.setuptools.py-modules]
-# single-module package — no sub-packages
-_ = []
+[tool.setuptools]
+py-modules = ["analyze_shuffle"]
