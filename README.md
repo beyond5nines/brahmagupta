@@ -6,13 +6,7 @@ A collection of tools for debugging and optimizing AWS Glue and Spark jobs.
 
 ## About the name
 
-**Brahmagupta** (c. 598–668 CE) was an Indian mathematician and astronomer born in Bhillamala (present-day Bhinmal, Rajasthan). He worked at the great astronomical center of Ujjain, where he wrote two works that changed the course of mathematics.
-
-His *Brāhmasphuṭasiddhānta* (628 CE) was the first text to treat **zero as a number** with defined arithmetic rules, and to formalize arithmetic operations on **negative numbers** — concepts that underpin every computation running in a modern data pipeline. He derived *Brahmagupta's formula* for the area of a cyclic quadrilateral, solved linear and quadratic equations, and developed early work on what is now known as Pell's equation. His interpolation formula is a direct precursor to Newton-Stirling interpolation.
-
-In astronomy, he argued that the Moon is closer to Earth than the Sun, and described gravity as a force of attraction — over a thousand years before Newton.
-
-His work reached the Arab world through translation and became a foundational thread in the mathematics that eventually produced the tools we use today.
+[**Brahmagupta**](https://en.wikipedia.org/wiki/Brahmagupta) (c. 598–668 CE) was an Indian mathematician and astronomer whose *Brāhmasphuṭasiddhānta* was the first text to treat zero as a number with defined arithmetic rules — a concept that underpins every computation in a modern data pipeline.
 
 This project is named after him because it does what he did: looks past the surface abstraction, measures the actual structure underneath, and says precisely what needs to change.
 
