@@ -30,7 +30,7 @@ lz4 = ["lz4>=4.0.0"]
 dev  = ["lz4>=4.0.0", "pytest>=8.0", "pytest-cov"]
 
 [project.scripts]
-analyze-shuffle = "analyze_shuffle:main"
+scan = "scan:main"
 
 [tool.setuptools]
-py-modules = ["analyze_shuffle"]
+py-modules = ["scan"]

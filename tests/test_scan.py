@@ -1,5 +1,5 @@
 """
-Tests for analyze_shuffle.py.
+Tests for scan.py.
 
 Covers: format detection, index parsing, partition building,
 string extraction, token frequency, compression estimates,
@@ -11,7 +11,7 @@ import struct
 import pytest
 from pathlib import Path
 
-from analyze_shuffle import (
+from scan import (
     LZ4_BLOCK_MAGIC,
     SNAPPY_MAGIC,
     ZSTD_MAGIC,
