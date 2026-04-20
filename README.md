@@ -14,7 +14,7 @@ This project is named after him because it does what he did: looks past the surf
 
 ## Tools
 
-### scan.py.py
+### scan.py
 
 A command-line tool for inspecting Spark and AWS Glue shuffle `.data` files.
 
