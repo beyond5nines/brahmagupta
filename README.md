@@ -12,6 +12,8 @@ Inspect AWS Glue shuffle `.data` files. Reports partition layout, compression, a
 
 > **Scope:** verified on AWS Glue 3.0 / 4.0 / 5.0. Apache Spark, Databricks, EMR may use different LZ4 framing — not currently supported. PRs welcome.
 
+> **Sampling note:** the compression comparison reads the first 200 KB of (decompressed) payload. For shuffles where data type changes by partition position, ratios may understate or overstate the full-file behavior.
+
 > **Background:** built during the investigation in [Look Ma, No Servers! — The "No Space Left on Device" Trap](https://beyond5nines.com/look-ma-no-servers-03/).
 
 ### Install

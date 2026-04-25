@@ -135,8 +135,6 @@ def parse_index_offsets(index_path: Path) -> list[int]:
                 f"offsets not monotonic at index {i+1}: "
                 f"{offsets[i+1]:,} < {offsets[i]:,}"
             )
-    if offsets[-1] < 0:
-        raise ValueError(f"negative offset {offsets[-1]} in {index_path}")
 
     return offsets
 
@@ -175,17 +173,29 @@ def decompress_lz4_blocks(
     pos = 16  # 8-byte magic + 4-byte token + 4-byte max-block-size
     stopped = False
 
+    # Spark default LZ4 block size is 64 KB but is configurable
+    # (spark.io.compression.lz4.blockSize). Try increasing caps on failure
+    # so a tuned job's shuffle still decodes.
+    block_caps = (65536, 131072, 262144, 1048576)
+
     while pos + 4 <= len(raw):
         (sz,) = struct.unpack_from(">i", raw, pos)
         pos += 4
         if sz <= 0 or pos + sz > len(raw):
             stopped = True
             break
-        try:
-            # 64 KB = Spark LZ4BlockOutputStream default block size
-            block = _lz4_block.decompress(raw[pos:pos + sz], uncompressed_size=65536)
-        except Exception as e:
-            sys.stderr.write(f"warning: lz4 decode failed at offset {pos}: {e}\n")
+        block = None
+        for cap in block_caps:
+            try:
+                block = _lz4_block.decompress(raw[pos:pos + sz], uncompressed_size=cap)
+                break
+            except Exception:
+                continue
+        if block is None:
+            sys.stderr.write(
+                f"warning: lz4 decode failed at offset {pos} "
+                f"(tried block sizes up to {block_caps[-1]:,})\n"
+            )
             return bytes(out)
         if len(out) + len(block) > max_total_bytes:
             raise ValueError(
