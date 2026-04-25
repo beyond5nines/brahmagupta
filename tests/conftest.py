@@ -46,24 +46,6 @@ def lz4_shuffle(tmp_path):
 
 
 @pytest.fixture
-def snappy_shuffle(tmp_path):
-    """Shuffle file starting with Snappy magic bytes."""
-    data = b"\xff\x06\x00\x00sNaPpY" + b"x" * 200
-    data_file = tmp_path / "shuffle_2_0_0.data"
-    data_file.write_bytes(data)
-    return data_file
-
-
-@pytest.fixture
-def zstd_shuffle(tmp_path):
-    """Shuffle file starting with ZSTD magic bytes."""
-    data = b"\x28\xb5\x2f\xfd" + b"z" * 200
-    data_file = tmp_path / "shuffle_3_0_0.data"
-    data_file.write_bytes(data)
-    return data_file
-
-
-@pytest.fixture
 def no_index_shuffle(tmp_path):
     """Shuffle .data file with no companion .index file."""
     data = b"standalone data " * 50
