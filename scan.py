@@ -305,23 +305,31 @@ def _print_recommendations(report: ShuffleReport) -> None:
     print(f"\n\n{SEPARATOR}")
     print("RECOMMENDATIONS")
     print(SEPARATOR)
-    print(f"""
+
+    if parts < total:
+        print(f"""
   # Reduce from {total} → {parts} (non-empty = {non_empty}, rounded to nearest 10)
   spark.conf.set("spark.sql.shuffle.partitions",                  "{parts}")
 
   # AQE auto-coalesces empty/tiny partitions at runtime
   spark.conf.set("spark.sql.adaptive.enabled",                    "true")
   spark.conf.set("spark.sql.adaptive.coalescePartitions.enabled", "true")
-
-  # Verify against the compression comparison above before switching
-  spark.conf.set("spark.io.compression.codec",                    "zstd")
 """)
-
-    if empty > 0:
         print(
             f"  Eliminates {empty} empty partition slot(s) — reduces shuffle "
             f"metadata and merge passes; file-size change is negligible.\n"
         )
+    else:
+        print(
+            f"\n  Partitions look balanced ({non_empty}/{total} non-empty) — "
+            f"no reduction suggested.\n"
+        )
+
+    # Codec hint applies regardless of partition layout
+    print(
+        '  # Verify against the compression comparison above before switching\n'
+        '  spark.conf.set("spark.io.compression.codec", "zstd")\n'
+    )
 
 
 def build_json_report(report: ShuffleReport) -> str:

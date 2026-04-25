@@ -375,10 +375,20 @@ def test_decompress_lz4_blocks_clean_stream_silent(capsys):
     assert capsys.readouterr().err == ""
 
 
-def test_recommendations_use_correct_spark_config_keys(raw_shuffle, capsys):
-    # guard against regression of the .enabled suffix
+def test_recommendations_use_correct_spark_config_keys(tmp_path, capsys):
+    # guard against regression of the .enabled suffix.
+    # need a fixture where suggested partitions < total so reduction block fires.
+    # 1 non-empty + 29 empty → suggests 10, 10 < 30, reduction triggers.
     from scan import print_report
-    print_report(analyze(raw_shuffle))
+    data = b"data " * 100
+    offsets = [0, len(data)] + [len(data)] * 29
+    data_file = tmp_path / "shuffle_unbal.data"
+    data_file.write_bytes(data)
+    (tmp_path / "shuffle_unbal.index").write_bytes(
+        struct.pack(f">{len(offsets)}q", *offsets)
+    )
+
+    print_report(analyze(data_file))
     out = capsys.readouterr().out
     assert "spark.sql.adaptive.coalescePartitions.enabled" in out
     bare = [
@@ -387,6 +397,15 @@ def test_recommendations_use_correct_spark_config_keys(raw_shuffle, capsys):
         and "spark.sql.adaptive.coalescePartitions.enabled" not in line
     ]
     assert not bare, f"bare key without .enabled: {bare}"
+
+
+def test_recommendations_balanced_case_skips_partition_tuning(raw_shuffle, capsys):
+    # raw_shuffle has 3 non-empty out of 3 — should not suggest reduction
+    from scan import print_report
+    print_report(analyze(raw_shuffle))
+    out = capsys.readouterr().out
+    assert "balanced" in out
+    assert "spark.sql.shuffle.partitions" not in out
 
 
 # ---------------------------------------------------------------------------
